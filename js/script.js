@@ -47,3 +47,62 @@ const menuButton = document.querySelector(".btn-menu");
             console.dir(element);
         }, 1000);
     })();
+
+(function () {
+    emailjs.init("A7psiPgZknZ8X8GWa");
+  })();
+  
+  document.getElementById("contactForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+  
+    document.getElementById("preloader").style.display = "flex";
+  
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const subject = document.getElementById("subject").value;
+    const message = document.getElementById("message").value;
+  
+    const templateParams = {
+      from_name: name,
+      from_email: email,
+      subject: subject,
+      message: message,
+    };
+  
+    emailjs
+      .send("service_zzj63qm", "template_bwf5g7r", templateParams)
+      .then(
+        function (response) {
+          console.log("SUCCESS!", response.status, response.text);
+          showModal();
+          document.getElementById("contactForm").reset();
+          document.getElementById("preloader").style.display = "none";
+        },
+        function (error) {
+          console.log("FAILED...", error);
+          alert("Failed to send the message. Please try again.");
+          document.getElementById("preloader").style.display = "none";
+        }
+      );
+  });
+  
+  function showModal() {
+    const modal = document.getElementById("successModal");
+    modal.style.display = "block";
+  
+    setTimeout(function () {
+      closeModal();
+    }, 5000);
+  }
+  
+  function closeModal() {
+    document.getElementById("successModal").style.display = "none";
+  }
+  
+  window.onclick = function (event) {
+    const modal = document.getElementById("successModal");
+    if (event.target === modal) {
+      closeModal();
+    }
+  }
+  
